@@ -8,6 +8,9 @@ function App() {
       <div>
         <Contador />
       </div>
+      <div>
+        
+      </div>
     </div>
   )
 }
