@@ -42,7 +42,7 @@ function FormularioCadastro(){
         return
 
         } 
-        if(user.email.trim().length != 9){
+        if(user.email.trim().length < 9){
           setVerificacao((dados) => ({
               ...dados,
               erro: "email está incompleto"
