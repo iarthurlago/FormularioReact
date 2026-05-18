@@ -12,6 +12,28 @@ function FormularioCadastro(){
     const [user, setUser] = useState({nome:"", email:"", telefone:''})
     const [verificacao, setVerificacao] = useState({erro:"", sucesso: false})
 
+    /*
+    const handleSubmit = (e) => {
+        e.preventDefault()
+        
+        if (!nome) return console.log()
+
+      try{
+            //Logo abaixo das validações
+        const resposta= await fetch('http://localhost:3001/registros, {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json},
+        body: JSON.stringify({nome, email, telefone})
+        })
+        const resultado = resposta.json()
+        console.log(resultado)
+
+      } catch (error){
+        console.log("Erro ao conectar ao servidor")
+      }
+
+    */
+
     const handleSubmit = (e) => {
         e.preventDefault()
         
@@ -60,7 +82,11 @@ function FormularioCadastro(){
         console.log(user) // Send for DB
     }
 
-
+     useEffect(() => {
+            fetch('http://localhost:3000/registros')
+            .then(res => res.json())
+            .then(dados => console.log(dados))
+          }, [])
 
     return(
       
@@ -99,6 +125,7 @@ function FormularioCadastro(){
             ...dados,
             telefone: e.target.value
           }))}/>
+
 
           <Button text="Clica"></Button>
 
