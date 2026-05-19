@@ -13,17 +13,17 @@ function FormularioCadastro(){
     const [verificacao, setVerificacao] = useState({erro:"", sucesso: false})
 
     /*
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
         
-        if (!nome) return console.log()
+        if (!user.nome) return console.log()
 
       try{
             //Logo abaixo das validações
         const resposta= await fetch('http://localhost:3001/registros, {
         method: 'POST',
         headers: {'Content-Type': 'application/json},
-        body: JSON.stringify({nome, email, telefone})
+        body: JSON.stringify({user})
         })
         const resultado = resposta.json()
         console.log(resultado)
@@ -34,8 +34,10 @@ function FormularioCadastro(){
 
     */
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault()
+        
+        if (!user.nome) return console.log()
         
         if (user.nome.trim() === ""){
         setVerificacao((dados) => ({
@@ -72,24 +74,30 @@ function FormularioCadastro(){
           console.log(verificacao.erro)
           return
           }
-      
 
-        setVerificacao("")
-        setVerificacao((dados) => ({
-          ...dados,
-          sucesso: true
-        }))
-        console.log(user) // Send for DB
+        try{
+            //Logo abaixo das validações
+        const  resposta = await fetch('http://localhost:3000/registros', {
+        method: 'POST',
+        headers: {'Content-Type': 'application/json'},
+        body: JSON.stringify({user})
+        })
+        const resultado = resposta.json()
+        console.log(resultado)
+
+      } catch (error){
+        console.log("Erro ao conectar ao servidor")
+      }
     }
 
-     useEffect(() => {
-            fetch('http://localhost:3000/registros')
-            .then(res => res.json())
-            .then(dados => console.log(dados))
-          }, [])
+    //  useEffect(() => {
+    //         fetch('http://localhost:3000/registros')
+    //         .then(res => res.json())
+    //         .then(dados => console.log(dados))
+    //       }, [])
 
     return(
-      
+    
       <form onSubmit={handleSubmit}>
         {verificacao.erro && <p style={{color: "red"}}>{verificacao.erro}</p>}
         {verificacao.sucesso && <p style={{color: "green"}}>Cadastrado !!</p>}
@@ -132,7 +140,15 @@ function FormularioCadastro(){
         <div>
             <p>Nome do usuario: {user.nome}</p>
         </div>
-          
+          {/*registros.map > 0 && (
+            <ul>
+              {registros.map((item, index) => (
+                <li key={index}>
+                  {intem.nome} - {intem.email}
+                </li>
+              ))}
+            </ul>
+          )*/}
       </form>
     )
 }
