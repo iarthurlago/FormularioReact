@@ -1,7 +1,7 @@
 import InputField from './InputField';
 import Button from './Button';
 import Contador from './Contador';
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 function FormularioCadastro(){
     // const [nome, setnome] = useState('')
@@ -12,27 +12,7 @@ function FormularioCadastro(){
     const [user, setUser] = useState({nome:"", email:"", telefone:''})
     const [verificacao, setVerificacao] = useState({erro:"", sucesso: false})
 
-    /*
-    const handleSubmit = async (e) => {
-        e.preventDefault()
-        
-        if (!user.nome) return console.log()
-
-      try{
-            //Logo abaixo das validações
-        const resposta= await fetch('http://localhost:3001/registros, {
-        method: 'POST',
-        headers: {'Content-Type': 'application/json},
-        body: JSON.stringify({user})
-        })
-        const resultado = resposta.json()
-        console.log(resultado)
-
-      } catch (error){
-        console.log("Erro ao conectar ao servidor")
-      }
-
-    */
+    
 
     const handleSubmit = async (e) => {
         e.preventDefault()
@@ -46,7 +26,7 @@ function FormularioCadastro(){
         }))
         console.log(verificacao.erro)  //function for dont recharge page.
         return
-        }
+        } 
 
         if(user.telefone.trim().length != 11){
         setVerificacao((dados) => ({
@@ -90,11 +70,11 @@ function FormularioCadastro(){
       }
     }
 
-    //  useEffect(() => {
-    //         fetch('http://localhost:3000/registros')
-    //         .then(res => res.json())
-    //         .then(dados => console.log(dados))
-    //       }, [])
+     useEffect(() => {
+            fetch('http://localhost:3000/registros')
+            .then(res => res.json())
+            .then(dados => console.log(dados))
+          }, [])
 
     return(
     
@@ -127,7 +107,7 @@ function FormularioCadastro(){
           Label={"Telefone"} 
           type={"number"} 
           name={"telefone"} 
-          placeholder={"*****"}
+          placeholder={"12345678901"}
           value={user.telefone} 
           onChange={(e) => setUser((dados) => ({
             ...dados,
