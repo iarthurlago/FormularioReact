@@ -1,19 +1,30 @@
 import InputField from './InputField';
 import Button from './Button';
 import Contador from './Contador';
-import { useState, useEffect } from "react";
+import { useState, useEffect, useRef } from "react"; 
 
 function FormularioCadastro(){
-    // const [nome, setnome] = useState('')
-    // const [email, setEmail] = useState('')
-    // const [telefone, setTelefone] = useState('')
-    // const [erro, setErro] =useState("");
-    // const [sucesso, setSucesso] =useState(false);
     const [user, setUser] = useState({nome:"", email:"", telefone:''})
     const [verificacao, setVerificacao] = useState({erro:"", sucesso: false})
+    const [registros, setRegistros] = useState('')
+    const nomeRef = useRef(null) // <- 1.criar a referencia vazia
 
-    
+      const buscarRegistros = async () => {
+      const resposta = await fetch('http://localhost:3000/registros')
+      const dados = await resposta.json()
+      setRegistros(dados)
+    }
+    useEffect(() => {
+      buscarRegistros()
+    }, [])
 
+    useEffect(() => {
+      console.log('ref antes do focus:', nomeRef.current)
+      nomeRef.current.focus() // <- USE O SEU REF AQUI
+      console.log('ref depois do focus:', nomeRef.current)
+    })
+
+         
     const handleSubmit = async (e) => {
         e.preventDefault()
         
@@ -67,14 +78,10 @@ function FormularioCadastro(){
 
       } catch (error){
         console.log("Erro ao conectar ao servidor")
+        setVerificacao({ erro: "Erro ao conectar ao servidor", sucesso: false})
       }
     }
 
-     useEffect(() => {
-            fetch('http://localhost:3000/registros')
-            .then(res => res.json())
-            .then(dados => console.log(dados))
-          }, [])
 
     return(
     
@@ -87,10 +94,13 @@ function FormularioCadastro(){
           name={"nome"} 
           placeholder={"Digite Seu Nome Aqui"}  
           value={user.nome} 
+          inputRef={nomeRef}   // <- 2.passar o ref récem-criado como prop          
           onChange={(e) => setUser((dados) => ({
             ...dados,
             nome: e.target.value
-          }))}/>
+          }))}
+          
+          />
 
           <InputField 
           Label={"Email"} 
@@ -120,15 +130,16 @@ function FormularioCadastro(){
         <div>
             <p>Nome do usuario: {user.nome}</p>
         </div>
-          {/*registros.map > 0 && (
+          {registros.length > 0 && (
             <ul>
               {registros.map((item, index) => (
                 <li key={index}>
-                  {intem.nome} - {intem.email}
+
+                  {item.nome} - {item.email}
                 </li>
               ))}
             </ul>
-          )*/}
+          )}
       </form>
     )
 }
